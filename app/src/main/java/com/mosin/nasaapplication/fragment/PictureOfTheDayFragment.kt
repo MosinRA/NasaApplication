@@ -37,11 +37,29 @@ class PictureOfTheDayFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         setBottomSheetBehavior(view.findViewById(R.id.bottom_sheet_container))
+        textListener()
+        setVisibilityWiki()
+    }
+
+    private fun textListener() {
+        ui?.inputLayout?.clearFocus()
         ui?.inputLayout?.setEndIconOnClickListener {
             startActivity(Intent(Intent.ACTION_VIEW).apply {
                 data =
                     Uri.parse("https://en.wikipedia.org/wiki/${ui?.inputEditText?.text.toString()}")
             })
+        }
+    }
+
+    private fun setVisibilityWiki() {
+        ui?.chipsVis?.setOnClickListener {
+            ui?.chipsVis?.text = "Нажми на крестик чтобы скрыть"
+            ui?.inputLayout?.visibility = View.VISIBLE
+        }
+
+        ui?.chipsVis?.setOnCloseIconClickListener {
+            ui?.inputLayout?.visibility = View.GONE
+            ui?.chipsVis?.text = "Показать поиск на Википедии"
         }
     }
 
