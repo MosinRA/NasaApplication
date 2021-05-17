@@ -11,6 +11,7 @@ import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import coil.api.load
 import com.google.android.material.bottomsheet.BottomSheetBehavior
+import com.google.android.material.chip.Chip
 import com.mosin.nasaapplication.R
 import com.mosin.nasaapplication.databinding.PictureOfDayFragmentBinding
 import com.mosin.nasaapplication.model.PictureOfTheDayData
@@ -36,9 +37,23 @@ class PictureOfTheDayFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        setBottomSheetBehavior(view.findViewById(R.id.bottom_sheet_container))
         textListener()
         setVisibilityWiki()
+        chipGroupListener()
+    }
+
+    private fun chipGroupListener() {
+        ui?.themeChipGroup?.setOnCheckedChangeListener { chipGroup, position ->
+            chipGroup.findViewById<Chip>(position)?.let {
+                if (it.text == "Черная тема") {
+                    ThemeHolder.theme = R.style.Second
+                } else {
+                    ThemeHolder.theme = R.style.NasaApplication
+                }
+                Toast.makeText(context, "Выбрана ${it.text}", Toast.LENGTH_SHORT).show()
+                requireActivity().recreate()
+            }
+        }
     }
 
     private fun textListener() {
@@ -100,4 +115,8 @@ class PictureOfTheDayFragment : Fragment() {
         fun newInstance() = PictureOfTheDayFragment()
         private var isMain = true
     }
+}
+
+object ThemeHolder {
+    var theme = R.style.NasaApplication
 }

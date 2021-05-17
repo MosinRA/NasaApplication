@@ -1,0 +1,5 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <dimen name="margin_top_chips_vis_wiki">5dp</dimen>
+    <dimen name="margin_text">5dp</dimen>
+</resources>
