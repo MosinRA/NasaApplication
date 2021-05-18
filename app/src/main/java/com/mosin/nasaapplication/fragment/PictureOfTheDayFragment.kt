@@ -1,6 +1,8 @@
 package com.mosin.nasaapplication.fragment
 
+import android.content.Context
 import android.content.Intent
+import android.content.SharedPreferences
 import android.net.Uri
 import android.os.Bundle
 import android.view.*
@@ -18,6 +20,7 @@ import com.mosin.nasaapplication.model.PictureOfTheDayData
 import com.mosin.nasaapplication.model.PictureOfTheDayViewModel
 
 class PictureOfTheDayFragment : Fragment() {
+
 
     private var ui: PictureOfDayFragmentBinding? = null
     private lateinit var bottomSheetBehavior: BottomSheetBehavior<ConstraintLayout>
@@ -47,6 +50,7 @@ class PictureOfTheDayFragment : Fragment() {
             chipGroup.findViewById<Chip>(position)?.let {
                 if (it.text == "Черная тема") {
                     ThemeHolder.theme = R.style.Second
+
                 } else {
                     ThemeHolder.theme = R.style.NasaApplication
                 }
