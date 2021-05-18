@@ -10,6 +10,7 @@
         <item name="chipStyle">@style/chipWikiStyle</item>
         <item name="android:textColor">@color/backgroundGray</item>
         <item name="android:textStyle">italic</item>
+        <item name="android:windowBackground">@drawable/bg_black</item>
     </style>
 
     <style name="chipWikiStyle" parent="Widget.MaterialComponents.Chip.Entry">
