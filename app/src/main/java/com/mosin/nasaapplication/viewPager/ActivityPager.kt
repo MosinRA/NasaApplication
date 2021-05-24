@@ -24,6 +24,7 @@ class ActivityPager : AppCompatActivity() {
         setContentView(ui?.root)
 
         ui?.viewPager?.adapter = ViewPagerAdapter(supportFragmentManager)
+        ui?.viewPager?.setPageTransformer(true, DepthPageTransformer())
         ui?.tabLayout?.setupWithViewPager(ui?.viewPager)
         setHighlightedTab(EARTH)
         ui?.viewPager?.addOnPageChangeListener(object : ViewPager.OnPageChangeListener {
