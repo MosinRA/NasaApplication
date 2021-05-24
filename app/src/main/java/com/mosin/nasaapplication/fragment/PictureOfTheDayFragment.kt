@@ -1,29 +1,26 @@
 package com.mosin.nasaapplication.fragment
 
-import android.content.Context
 import android.content.Intent
-import android.content.SharedPreferences
 import android.net.Uri
 import android.os.Bundle
 import android.view.*
 import android.widget.Toast
-import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import coil.api.load
-import com.google.android.material.bottomsheet.BottomSheetBehavior
 import com.google.android.material.chip.Chip
 import com.mosin.nasaapplication.R
+import com.mosin.nasaapplication.bottomNav.ActivityBottomNav
 import com.mosin.nasaapplication.databinding.PictureOfDayFragmentBinding
 import com.mosin.nasaapplication.model.PictureOfTheDayData
 import com.mosin.nasaapplication.model.PictureOfTheDayViewModel
+import com.mosin.nasaapplication.viewPager.ActivityPager
 
 class PictureOfTheDayFragment : Fragment() {
 
 
     private var ui: PictureOfDayFragmentBinding? = null
-    private lateinit var bottomSheetBehavior: BottomSheetBehavior<ConstraintLayout>
     private val viewModel: PictureOfTheDayViewModel by lazy {
         ViewModelProvider(this).get(PictureOfTheDayViewModel::class.java)
     }
@@ -35,6 +32,7 @@ class PictureOfTheDayFragment : Fragment() {
         ui = it
         viewModel.getData()
             .observe(viewLifecycleOwner, Observer<PictureOfTheDayData> { renderData(it) })
+
     }.root
 
 
@@ -48,13 +46,13 @@ class PictureOfTheDayFragment : Fragment() {
     private fun chipGroupListener() {
         ui?.themeChipGroup?.setOnCheckedChangeListener { chipGroup, position ->
             chipGroup.findViewById<Chip>(position)?.let {
-                if (it.text == "Черная тема") {
-                    ThemeHolder.theme = R.style.Second
-
+                if (it.text == "view pager") {
+                    startActivity(Intent(requireActivity(), ActivityPager::class.java))
                 } else {
-                    ThemeHolder.theme = R.style.NasaApplication
+//                    ThemeHolder.theme = R.style.NasaApplication
+                    startActivity(Intent(requireActivity(), ActivityBottomNav::class.java))
                 }
-                Toast.makeText(context, "Выбрана ${it.text}", Toast.LENGTH_SHORT).show()
+                Toast.makeText(context, "Выбран ${it.text}", Toast.LENGTH_SHORT).show()
                 requireActivity().recreate()
             }
         }
@@ -101,11 +99,6 @@ class PictureOfTheDayFragment : Fragment() {
                 }
             }
         }
-    }
-
-    private fun setBottomSheetBehavior(bottomSheet: ConstraintLayout) {
-        bottomSheetBehavior = BottomSheetBehavior.from(bottomSheet)
-        bottomSheetBehavior.state = BottomSheetBehavior.STATE_COLLAPSED
     }
 
     private fun Fragment.toast(string: String?) {
