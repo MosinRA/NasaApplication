@@ -1,3 +1,11 @@
 <resources>
     <string name="app_name">NasaApplication</string>
+    <string name="search_wiki">Поиск</string>
+    <string name="wiki_helper_text">Найти на wiki</string>
+    <string name="photo_of_the_day_stub">Фото дня</string>
+    <string name="setVisibiltySearchWiki">Показать поиск на Википедии</string>
+    <string name="theme_1">view pager</string>
+    <string name="theme_2">bottom nav</string>
+    <string name="bottomnavigationview">BottomNavigationView</string>
+    <string name="tablayout_viewpager">TabLayout + ViewPager</string>
 </resources>

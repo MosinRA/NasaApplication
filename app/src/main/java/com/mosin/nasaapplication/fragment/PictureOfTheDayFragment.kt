@@ -1,0 +1,119 @@
+package com.mosin.nasaapplication.fragment
+
+import android.content.Intent
+import android.net.Uri
+import android.os.Bundle
+import android.view.*
+import android.widget.Toast
+import androidx.fragment.app.Fragment
+import androidx.lifecycle.Observer
+import androidx.lifecycle.ViewModelProvider
+import coil.api.load
+import com.google.android.material.chip.Chip
+import com.mosin.nasaapplication.R
+import com.mosin.nasaapplication.bottomNav.ActivityBottomNav
+import com.mosin.nasaapplication.databinding.PictureOfDayFragmentBinding
+import com.mosin.nasaapplication.model.PictureOfTheDayData
+import com.mosin.nasaapplication.model.PictureOfTheDayViewModel
+import com.mosin.nasaapplication.viewPager.ActivityPager
+
+class PictureOfTheDayFragment : Fragment() {
+
+
+    private var ui: PictureOfDayFragmentBinding? = null
+    private val viewModel: PictureOfTheDayViewModel by lazy {
+        ViewModelProvider(this).get(PictureOfTheDayViewModel::class.java)
+    }
+
+    override fun onCreateView(
+        inflater: LayoutInflater, container: ViewGroup?,
+        savedInstanceState: Bundle?
+    ) = PictureOfDayFragmentBinding.inflate(inflater, container, false).also {
+        ui = it
+        viewModel.getData()
+            .observe(viewLifecycleOwner, Observer<PictureOfTheDayData> { renderData(it) })
+
+    }.root
+
+
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
+        textListener()
+        setVisibilityWiki()
+        chipGroupListener()
+    }
+
+    private fun chipGroupListener() {
+        ui?.themeChipGroup?.setOnCheckedChangeListener { chipGroup, position ->
+            chipGroup.findViewById<Chip>(position)?.let {
+                if (it.text == "view pager") {
+                    startActivity(Intent(requireActivity(), ActivityPager::class.java))
+                } else {
+//                    ThemeHolder.theme = R.style.NasaApplication
+                    startActivity(Intent(requireActivity(), ActivityBottomNav::class.java))
+                }
+                Toast.makeText(context, "Выбран ${it.text}", Toast.LENGTH_SHORT).show()
+                requireActivity().recreate()
+            }
+        }
+    }
+
+    private fun textListener() {
+        ui?.inputLayout?.clearFocus()
+        ui?.inputLayout?.setEndIconOnClickListener {
+            startActivity(Intent(Intent.ACTION_VIEW).apply {
+                data =
+                    Uri.parse("https://en.wikipedia.org/wiki/${ui?.inputEditText?.text.toString()}")
+            })
+        }
+    }
+
+    private fun setVisibilityWiki() {
+        ui?.chipsVis?.setOnClickListener {
+            ui?.chipsVis?.text = "Нажми на крестик чтобы скрыть"
+            ui?.inputLayout?.visibility = View.VISIBLE
+        }
+
+        ui?.chipsVis?.setOnCloseIconClickListener {
+            ui?.inputLayout?.visibility = View.GONE
+            ui?.chipsVis?.text = "Показать поиск на Википедии"
+        }
+    }
+
+    private fun renderData(data: PictureOfTheDayData) {
+        when (data) {
+            is PictureOfTheDayData.Success -> {
+                val serverResponseData = data.serverResponseData
+                val url = serverResponseData.url
+                if (url.isNullOrEmpty()) {
+                    toast("Ой! Что-то пошло не так! Похоже что ссылка пустая!")
+                } else {
+                    //showSuccess()
+                    ui?.imageView?.load(url) {
+                        lifecycle(this@PictureOfTheDayFragment)
+                        error(R.drawable.ic_load_error_vector)
+                        placeholder(R.drawable.no_foto)
+                    }
+                    ui?.descriptionHeader?.text = serverResponseData.title
+                    ui?.description?.text = serverResponseData.explanation
+                }
+            }
+        }
+    }
+
+    private fun Fragment.toast(string: String?) {
+        Toast.makeText(context, string, Toast.LENGTH_SHORT).apply {
+            setGravity(Gravity.BOTTOM, 0, 250)
+            show()
+        }
+    }
+
+    companion object {
+        fun newInstance() = PictureOfTheDayFragment()
+        private var isMain = true
+    }
+}
+
+object ThemeHolder {
+    var theme = R.style.NasaApplication
+}
