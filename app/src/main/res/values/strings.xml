@@ -8,4 +8,5 @@
     <string name="theme_2">bottom nav</string>
     <string name="bottomnavigationview">BottomNavigationView</string>
     <string name="tablayout_viewpager">TabLayout + ViewPager</string>
+    <string name="tap_to_image">Нажмите на картинку для отображения описания</string>
 </resources>
