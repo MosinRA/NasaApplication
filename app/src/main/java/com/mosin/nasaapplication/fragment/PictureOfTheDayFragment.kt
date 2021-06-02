@@ -1,10 +1,17 @@
 package com.mosin.nasaapplication.fragment
 
+import android.graphics.Color
 import android.os.Bundle
+import android.text.Spannable
+import android.text.SpannableString
+import android.text.style.BackgroundColorSpan
+import android.text.style.ForegroundColorSpan
+import android.text.style.QuoteSpan
 import android.transition.ChangeBounds
 import android.transition.TransitionManager
 import android.view.*
 import android.view.animation.AnticipateOvershootInterpolator
+import android.widget.TextView
 import android.widget.Toast
 import androidx.constraintlayout.widget.ConstraintSet
 import androidx.fragment.app.Fragment
@@ -41,6 +48,22 @@ class PictureOfTheDayFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 //        textListener()
+        spanText()
+    }
+
+    fun spanText() {
+        val spannable = SpannableString("Нажмите на картинку для отображения описания")
+        spannable.setSpan(
+            ForegroundColorSpan(Color.RED),
+            11, 19,
+            Spannable.SPAN_EXCLUSIVE_INCLUSIVE
+        )
+        spannable.setSpan(
+            BackgroundColorSpan(Color.BLACK),
+            0,
+            spannable.length,
+            Spannable.SPAN_EXCLUSIVE_EXCLUSIVE)
+        ui?.tap?.setText(spannable, TextView.BufferType.SPANNABLE)
     }
 
     private fun showComponents() {
